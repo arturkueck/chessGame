@@ -1,7 +1,15 @@
 
 package backend;
 
+import java.awt.Color;
 import java.util.zip.Inflater;
+
+import backend.pieces.Bishop;
+import backend.pieces.King;
+import backend.pieces.Knight;
+import backend.pieces.Pawn;
+import backend.pieces.Queen;
+import backend.pieces.Rook;
 
 public class Board {
     public Field[][] board = new Field[8][8];
@@ -16,12 +24,39 @@ public class Board {
     }
     
     public void createChessGame() {
-        // Logic for initializing a chess game can be implemented here.
+        // Farben definieren
+        Color white = Color.WHITE;
+        Color black = Color.BLACK;
+
+        // Weiße Figuren platzieren (unten)
+        new Rook(white, this).setField(7, 0);
+        new Knight(white, this).setField(7, 1);
+        new Bishop(white, this).setField(7, 2);
+        new Queen(white, this).setField(7, 3);
+        new King(white, this).setField(7, 4);
+        new Bishop(white, this).setField(7, 5);
+        new Knight(white, this).setField(7, 6);
+        new Rook(white, this).setField(7, 7);
+
+        for (int i = 0; i < 8; i++) {
+            new Pawn(white, this).setField(6, i);
+        }
+
+        // Schwarze Figuren platzieren (oben)
+        new Rook(black, this).setField(0, 0);
+        new Knight(black, this).setField(0, 1);
+        new Bishop(black, this).setField(0, 2);
+        new Queen(black, this).setField(0, 3);
+        new King(black, this).setField(0, 4);
+        new Bishop(black, this).setField(0, 5);
+        new Knight(black, this).setField(0, 6);
+        new Rook(black, this).setField(0, 7);
+
+        for (int i = 0; i < 8; i++) {
+            new Pawn(black, this).setField(1, i);
+        }
     }
     
-    public void createDameGame() {
-        // Logic for initializing a checkers game can be implemented here.
-    }
     
     public boolean checkIfEmpty(int col, int row) {
         return board[col][row].onField == null;

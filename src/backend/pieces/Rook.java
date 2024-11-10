@@ -58,4 +58,10 @@ public class Rook extends Piece {
 
         return reachableFields.toArray(new Field[0]);
     }
+    
+    @Override
+    public void moveTo(Field targetField) {
+        super.moveTo(targetField);
+        this.hasMoved = true; // Sobald sich der Turm bewegt, wird hasMoved auf true gesetzt
+    }
 }

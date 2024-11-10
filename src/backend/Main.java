@@ -1,55 +1,71 @@
 package backend;
 
-import java.awt.Color;
-
-import backend.pieces.Pawn;
-import backend.pieces.Rook;
+import java.util.Scanner;
 
 public class Main {
-	public static void main(String[] args) {
-		Board board = new Board();
-		Pawn pawn = new Pawn(Color.BLACK, board);
-		Pawn pawn2 = new Pawn(Color.WHITE, board);
-		Pawn pawn3 = new Pawn(Color.BLACK, board);
-		Pawn pawn4 = new Pawn(Color.WHITE, board);
-		pawn.setField(1, 3); // Setzt den Turm auf D4
-		pawn2.setField(3, 4);
-		pawn3.setField(1, 0);
-		pawn4.setField(6, 0);
-		
-		Field[] reachableFields = pawn.getReachableFields();
-		for (Field field : reachableFields) {
-		    System.out.println(field);
-		}
+    public static void main(String[] args) {
+        Board board = new Board();
+        board.createChessGame();
+        Scanner scanner = new Scanner(System.in);
 
-		System.out.println(board.toString());
-		
-		board.movePiece(1, 3, 3, 3);
-		
-		reachableFields = pawn2.getReachableFields();
-		for (Field field : reachableFields) {
-		    System.out.println(field);
-		}
-		
-		System.out.println(board.toString());
-		
-		board.movePiece(1, 3, 3, 3);
-		
-		reachableFields = pawn2.getReachableFields();
-		for (Field field : reachableFields) {
-		    System.out.println(field);
-		}
-		
-		System.out.println(board.toString());
-		
-		board.movePiece(1, 3, 3, 3);
-		
-		reachableFields = pawn2.getReachableFields();
-		for (Field field : reachableFields) {
-		    System.out.println(field);
-		}
-		
-		System.out.println(board.toString());
+        System.out.println("Willkommen zum Schachspiel!");
+        System.out.println("Eingabeformat: Startfeld und Zielfeld (z. B. e2 e4).");
+        System.out.println("Gib 'exit' ein, um das Spiel zu beenden.");
+        System.out.println(board.toString());
 
-	}
+        while (true) {
+            System.out.print("Dein Zug: ");
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Spiel beendet.");
+                break;
+            }
+
+            String[] parts = input.split(" ");
+            if (parts.length != 2) {
+                System.out.println("Ungültige Eingabe. Beispiel: e2 e4");
+                continue;
+            }
+
+            String start = parts[0];
+            String target = parts[1];
+
+            if (!isValidNotation(start) || !isValidNotation(target)) {
+                System.out.println("Ungültige Eingabe. Beispiel: e2 e4");
+                continue;
+            }
+
+            int startCol = notationToColumn(start.charAt(0));
+            int startRow = notationToRow(start.charAt(1));
+            int targetCol = notationToColumn(target.charAt(0));
+            int targetRow = notationToRow(target.charAt(1));
+
+            if (!board.movePiece(startRow, startCol, targetRow, targetCol)) {
+                System.out.println("Ungültiger Zug. Versuche es erneut.");
+            } else {
+                System.out.println("Zug erfolgreich.");
+                System.out.println(board.toString());
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static boolean isValidNotation(String notation) {
+        if (notation.length() != 2) return false;
+
+        char column = notation.charAt(0);
+        char row = notation.charAt(1);
+
+        return column >= 'a' && column <= 'h' && row >= '1' && row <= '8';
+    }
+
+    private static int notationToColumn(char column) {
+        return column - 'a';
+    }
+
+    private static int notationToRow(char row) {
+        return 8 - (row - '1') - 1; // Umwandlung von Schachnotation in Array-Index
+    }
 }
