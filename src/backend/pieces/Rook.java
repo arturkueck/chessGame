@@ -8,7 +8,8 @@ import backend.Field;
 import backend.Piece;
 
 public class Rook extends Piece {
-
+	public boolean hasMooved = false;
+	
     public Rook(Color color, Board board) {
         super("R", color, board);
     }
@@ -19,7 +20,7 @@ public class Rook extends Piece {
         int currentRow = this.getField().row;
         int currentColumn = this.getField().column;
 
-        // Vier Richtungen prüfen
+        // Vier Richtungen prï¿½fen
         int[][] directions = {
             {0, 1},  // Rechts
             {0, -1}, // Links
@@ -43,13 +44,13 @@ public class Rook extends Piece {
                 } else if (nextField.onField.getColor() != this.getColor()) {
                     // Gegnerische Figur: Turm kann das Feld erreichen
                     reachableFields.add(nextField);
-                    break; // Schleife für diese Richtung abbrechen
+                    break; // Schleife fï¿½r diese Richtung abbrechen
                 } else {
                     // Eigene Figur: Blockade, Schleife abbrechen
                     break;
                 }
 
-                // Nächster Schritt in die Richtung
+                // Nï¿½chster Schritt in die Richtung
                 newRow += dRow;
                 newCol += dCol;
             }

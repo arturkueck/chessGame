@@ -8,7 +8,8 @@ import backend.Field;
 import backend.Piece;
 
 public class King extends Piece {
-
+	public boolean hasMooved = false;
+	
     public King(Color color, Board board) {
         super("K", color, board);
     }
@@ -19,7 +20,7 @@ public class King extends Piece {
         int currentRow = this.getField().row;
         int currentColumn = this.getField().column;
 
-        // Alle möglichen Bewegungen eines Königs
+        // Alle mï¿½glichen Bewegungen eines Kï¿½nigs
         int[][] moves = {
             {0, 1},   // Rechts
             {0, -1},  // Links
@@ -35,18 +36,18 @@ public class King extends Piece {
             int newRow = currentRow + move[0];
             int newCol = currentColumn + move[1];
 
-            // Prüfen, ob das neue Feld innerhalb des Schachbretts liegt
+            // Prï¿½fen, ob das neue Feld innerhalb des Schachbretts liegt
             if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
                 Field nextField = board.board[newRow][newCol];
 
                 if (nextField.onField == null) {
-                    // Feld ist leer, König kann sich hierhin bewegen
+                    // Feld ist leer, Kï¿½nig kann sich hierhin bewegen
                     reachableFields.add(nextField);
                 } else if (nextField.onField.getColor() != this.getColor()) {
-                    // Gegnerische Figur: König kann das Feld betreten
+                    // Gegnerische Figur: Kï¿½nig kann das Feld betreten
                     reachableFields.add(nextField);
                 }
-                // Eigene Figuren blockieren, daher keine zusätzliche Logik notwendig
+                // Eigene Figuren blockieren, daher keine zusï¿½tzliche Logik notwendig
             }
         }
 
