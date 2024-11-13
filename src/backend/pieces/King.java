@@ -1,3 +1,4 @@
+
 package backend.pieces;
 
 import java.awt.Color;
@@ -8,8 +9,8 @@ import backend.Field;
 import backend.Piece;
 
 public class King extends Piece {
-	public boolean hasMooved = false;
-	
+    public boolean hasMooved = false;
+
     public King(Color color, Board board) {
         super("K", color, board);
     }
@@ -98,7 +99,7 @@ public class King extends Piece {
         for (Field[] fields : board.board) {
             for (Field field : fields) {
                 Piece piece = field.onField;
-                if (piece != null && piece.getColor() != this.getColor()) {
+                if (piece != null && piece.getColor() != this.getColor() && !(piece instanceof King)) {
                     Field[] reachableFields = piece.getReachableFields();
                     for (Field reachableField : reachableFields) {
                         if (reachableField.row == row && reachableField.column == column) {
@@ -110,10 +111,32 @@ public class King extends Piece {
         }
         return false;
     }
-    
+
     @Override
     public void moveTo(Field targetField) {
+        int kingRow = this.getField().row;
+        int kingCol = this.getField().column;
+        int targetCol = targetField.column;
+
+        // Überprüfen, ob es sich um eine Rochade handelt
+        if (!this.hasMoved && Math.abs(targetCol - kingCol) == 2) {
+            // Königsseite Rochade
+            if (targetCol > kingCol) {
+                Rook rook = (Rook) board.board[kingRow][7].onField;
+                if (rook != null) {
+                    rook.moveTo(board.board[kingRow][5]);
+                }
+            }
+            // Damenseite Rochade
+            else {
+                Rook rook = (Rook) board.board[kingRow][0].onField;
+                if (rook != null) {
+                    rook.moveTo(board.board[kingRow][3]);
+                }
+            }
+        }
+
         super.moveTo(targetField);
-        this.hasMoved = true; // Sobald sich der Turm bewegt, wird hasMoved auf true gesetzt
+        this.hasMoved = true; // Sobald sich der König bewegt, wird hasMoved auf true gesetzt
     }
 }

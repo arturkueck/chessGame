@@ -52,6 +52,11 @@ public abstract class Piece {
         this.field = targetField;
     }
     
+    public String getSymbol() {
+        return name.substring(0, 1).toUpperCase(); // Erster Buchstabe des Namens
+    }
+
+    
     @Override
     public String toString() {
         return name + "_" + getColorName(color);

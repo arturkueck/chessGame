@@ -120,4 +120,12 @@ public class Board {
         }
         return out;
     }
+    
+    public Field getField(int row, int col) {
+        if (row < 0 || row >= 8 || col < 0 || col >= 8) {
+            throw new IllegalArgumentException("Ungültige Koordinaten: Die Werte müssen zwischen 0 und 7 liegen.");
+        }
+        return board[row][col];
+    }
+
 }
