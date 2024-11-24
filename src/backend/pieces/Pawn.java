@@ -33,7 +33,7 @@ public class Pawn extends Piece {
 
                 // Two squares forward (only from initial position)
                 if ((this.getColor() == Color.WHITE && currentRow == 6) ||
-                    (this.getColor() == Color.BLACK && currentRow == 1)) {
+                        (this.getColor() == Color.BLACK && currentRow == 1)) {
                     Field twoStepsField = board.board[newRow + direction][currentColumn];
                     if (twoStepsField.onField == null) {
                         reachableFields.add(twoStepsField);
@@ -55,9 +55,10 @@ public class Pawn extends Piece {
             if (leftField.onField instanceof Pawn) {
                 Pawn leftPawn = (Pawn) leftField.onField;
                 System.out.println("Checking En-Passant on diagonal left: " + leftPawn);
-                System.out.println("lastMovedPiece: " + board.lastMovedPiece + ", hasMovedTwoFields: " + leftPawn.hasMovedTwoFields);
+                System.out.println("lastMovedPiece: " + board.lastMovedPiece + ", hasMovedTwoFields: "
+                        + leftPawn.hasMovedTwoFields);
                 if (leftPawn.getColor() != this.getColor() && leftPawn.hasMovedTwoFields &&
-                    board.lastMovedPiece == leftPawn) {
+                        board.lastMovedPiece == leftPawn) {
                     System.out.println("En-Passant available on diagonal left.");
                     reachableFields.add(diagonalLeft);
                 }
@@ -77,9 +78,10 @@ public class Pawn extends Piece {
             if (rightField.onField instanceof Pawn) {
                 Pawn rightPawn = (Pawn) rightField.onField;
                 System.out.println("Checking En-Passant on diagonal right: " + rightPawn);
-                System.out.println("lastMovedPiece: " + board.lastMovedPiece + ", hasMovedTwoFields: " + rightPawn.hasMovedTwoFields);
+                System.out.println("lastMovedPiece: " + board.lastMovedPiece + ", hasMovedTwoFields: "
+                        + rightPawn.hasMovedTwoFields);
                 if (rightPawn.getColor() != this.getColor() && rightPawn.hasMovedTwoFields &&
-                    board.lastMovedPiece == rightPawn) {
+                        board.lastMovedPiece == rightPawn) {
                     System.out.println("En-Passant available on diagonal right.");
                     reachableFields.add(diagonalRight);
                 }
@@ -94,7 +96,8 @@ public class Pawn extends Piece {
         // Check if moving two squares forward
         if (Math.abs(this.getField().row - targetField.row) == 2) {
             this.hasMovedTwoFields = true;
-            System.out.println("Pawn moved two fields: " + this + " from " + this.getField().row + " to " + targetField.row);
+            System.out.println(
+                    "Pawn moved two fields: " + this + " from " + this.getField().row + " to " + targetField.row);
         } else {
             this.hasMovedTwoFields = false;
         }
