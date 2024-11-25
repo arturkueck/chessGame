@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JColorChooser;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,6 +21,7 @@ public class Controller {
     private String selectedField = null;
     private List<String> moveHistory = new ArrayList<>(); // List to track moves
 
+    
     private Color currentPlayer;
 
     private Color whiteSquareColor = Color.WHITE; // Default white color
@@ -92,6 +94,18 @@ public class Controller {
     private String generateMoveNotation(int startRow, int startCol, int targetRow, int targetCol, Piece movedPiece,
             Piece targetPiece) {
         StringBuilder notation = new StringBuilder();
+        
+        // Prüfen auf kurze und lange Rochade
+        if (movedPiece.getSymbol().equals("K") && Math.abs(startCol - targetCol) == 2) {
+            if (targetCol > startCol) {
+                // Kurze Rochade
+                return "O-O";
+            } else {
+                // Lange Rochade
+                return "O-O-O";
+            }
+        }
+
 
         // 1. Add piece symbol unless it's a pawn
         if (!movedPiece.getSymbol().equals("P")) {
@@ -160,9 +174,33 @@ public class Controller {
             }
         }
 
+        // Listener für Figurenrotation
+        view.getRotateBlackPiecesCheckbox().addActionListener(e -> {
+            boolean rotateBlackPieces = view.getRotateBlackPiecesCheckbox().isSelected();
+            view.loadPieceIcons(!rotateBlackPieces); // Aktualisiere Icons
+            updateChessBoard(); // Neu rendern
+        });
+
         view.getShowCoordinatesCheckbox().addActionListener(e -> {
             boolean showCoordinates = view.getShowCoordinatesCheckbox().isSelected();
             toggleFieldCoordinates(showCoordinates);
+        });
+
+        // Color Picker Listeners bleiben unverändert
+        view.getWhiteSquareColorButton().addActionListener(e -> {
+            Color newWhiteColor = JColorChooser.showDialog(null, "Choose White Square Color", whiteSquareColor);
+            if (newWhiteColor != null) {
+                whiteSquareColor = newWhiteColor;
+                view.resetButtonColors(whiteSquareColor, darkSquareColor);
+            }
+        });
+
+        view.getDarkSquareColorButton().addActionListener(e -> {
+            Color newDarkColor = JColorChooser.showDialog(null, "Choose Dark Square Color", darkSquareColor);
+            if (newDarkColor != null) {
+                darkSquareColor = newDarkColor;
+                view.resetButtonColors(whiteSquareColor, darkSquareColor);
+            }
         });
     }
 
@@ -184,7 +222,8 @@ public class Controller {
         }
     }
 
-    private void toggleFieldCoordinates(boolean showCoordinates) {
+    void toggleFieldCoordinates(boolean showCoordinates) {
+    	System.out.println(showCoordinates);
         JPanel[][] chessBoardPanels = view.getChessBoardPanels();
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
