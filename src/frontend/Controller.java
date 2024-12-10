@@ -13,7 +13,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import backend.Board;
+import backend.Field;
 import backend.Piece;
+import backend.pieces.Bishop;
+import backend.pieces.Knight;
+import backend.pieces.Pawn;
+import backend.pieces.Queen;
+import backend.pieces.Rook;
 
 public class Controller {
     private Board board;
@@ -36,6 +42,48 @@ public class Controller {
         addListeners();
         updateChessBoard();
     }
+    
+    public void handlePawnPromotion(Pawn pawn, Field field) {
+        String[] options = {"Queen", "Rook", "Bishop", "Knight"};
+        String choice = (String) JOptionPane.showInputDialog(
+            null,
+            "Choose a piece for promotion:",
+            "Pawn Promotion",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]
+        );
+
+        if (choice != null) {
+            Piece newPiece = null;
+            switch (choice) {
+                case "Queen":
+                    newPiece = new Queen(pawn.getColor(), board);
+                    break;
+                case "Rook":
+                    newPiece = new Rook(pawn.getColor(), board);
+                    break;
+                case "Bishop":
+                    newPiece = new Bishop(pawn.getColor(), board);
+                    break;
+                case "Knight":
+                    newPiece = new Knight(pawn.getColor(), board);
+                    break;
+            }
+
+            if (newPiece != null) {
+                // Set the new piece on the field
+                field.placePiece(newPiece);
+                board.lastMovedPiece = newPiece; // Update the last moved piece
+                newPiece.setField(field.row, field.column);
+            }
+        }
+
+        updateChessBoard(); // Refresh the board view
+    }
+
+
 
     private void handleClick(int row, int col) {
         String fieldNotation = columnToNotation(col) + rowToNotation(row);
@@ -94,25 +142,30 @@ public class Controller {
     private String generateMoveNotation(int startRow, int startCol, int targetRow, int targetCol, Piece movedPiece,
             Piece targetPiece) {
         StringBuilder notation = new StringBuilder();
-        
-        // Prüfen auf kurze und lange Rochade
+
+        // PrÃ¼fen auf kurze und lange Rochade
         if (movedPiece.getSymbol().equals("K") && Math.abs(startCol - targetCol) == 2) {
             if (targetCol > startCol) {
-                // Kurze Rochade
-                return "O-O";
+                return "O-O"; // Kurze Rochade
             } else {
-                // Lange Rochade
-                return "O-O-O";
+                return "O-O-O"; // Lange Rochade
             }
         }
 
+        // En-Passant erkennen
+        if (movedPiece instanceof Pawn && targetPiece == null &&
+                Math.abs(startCol - targetCol) == 1 && Math.abs(startRow - targetRow) == 1) {
+            notation.append(columnToNotation(startCol)); // Spalte des schlagenden Bauern
+            notation.append("x").append(columnToNotation(targetCol)).append(rowToNotation(targetRow)); // Ziel
+            notation.append(" e.p."); // En-Passant-Kennzeichnung
+            return notation.toString();
+        }
 
         // 1. Add piece symbol unless it's a pawn
         if (!movedPiece.getSymbol().equals("P")) {
             notation.append(movedPiece.getSymbol());
         } else if (targetPiece != null) {
-            // Add the starting column for a pawn capture
-            notation.append(columnToNotation(startCol));
+            notation.append(columnToNotation(startCol)); // Add starting column for a pawn capture
         }
 
         // 2. Add "x" for a capture
@@ -133,6 +186,7 @@ public class Controller {
 
         return notation.toString();
     }
+
 
     private void checkGameStatus(Piece movedPiece) {
         Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -174,7 +228,7 @@ public class Controller {
             }
         }
 
-        // Listener für Figurenrotation
+        // Listener fï¿½r Figurenrotation
         view.getRotateBlackPiecesCheckbox().addActionListener(e -> {
             boolean rotateBlackPieces = view.getRotateBlackPiecesCheckbox().isSelected();
             view.loadPieceIcons(!rotateBlackPieces); // Aktualisiere Icons
@@ -186,7 +240,7 @@ public class Controller {
             toggleFieldCoordinates(showCoordinates);
         });
 
-        // Color Picker Listeners bleiben unverändert
+        // Color Picker Listeners bleiben unverï¿½ndert
         view.getWhiteSquareColorButton().addActionListener(e -> {
             Color newWhiteColor = JColorChooser.showDialog(null, "Choose White Square Color", whiteSquareColor);
             if (newWhiteColor != null) {

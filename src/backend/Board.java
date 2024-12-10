@@ -9,10 +9,12 @@ import backend.pieces.Knight;
 import backend.pieces.Pawn;
 import backend.pieces.Queen;
 import backend.pieces.Rook;
+import frontend.Controller;
 
 public class Board {
     public Field[][] board = new Field[8][8];
     public Piece lastMovedPiece = null; // Tracks the last moved piece
+    public Controller controller;
 
     public Board() {
         for (int i = 0; i < 8; i++) {
@@ -20,6 +22,10 @@ public class Board {
                 board[i][j] = new Field(i, j);
             }
         }
+    }
+    
+    public void setController(Controller controller) {
+    	this.controller = controller;
     }
 
     public void createChessGame() {
@@ -198,6 +204,13 @@ public class Board {
 
         return true; // No moves to escape or block -> Checkmate
     }
+    
+    public void notifyPawnPromotion(Pawn pawn, Field field) {
+        if (this.controller != null) {
+            this.controller.handlePawnPromotion(pawn, field);
+        }
+    }
+
 
     @Override
     public String toString() {

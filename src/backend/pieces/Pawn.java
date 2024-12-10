@@ -93,25 +93,42 @@ public class Pawn extends Piece {
 
     @Override
     public void moveTo(Field targetField) {
+        int startRow = this.getField().row;
+        int startCol = this.getField().column;
+
         // Check if moving two squares forward
-        if (Math.abs(this.getField().row - targetField.row) == 2) {
+        if (Math.abs(startRow - targetField.row) == 2) {
             this.hasMovedTwoFields = true;
-            System.out.println(
-                    "Pawn moved two fields: " + this + " from " + this.getField().row + " to " + targetField.row);
+            System.out.println("Pawn moved two fields: " + this + " from " + startRow + " to " + targetField.row);
         } else {
             this.hasMovedTwoFields = false;
         }
-        super.moveTo(targetField);
 
-        // Handle En-Passant captures if applicable
-        int colDiff = Math.abs(this.getField().column - targetField.column);
-        if (colDiff == 1 && targetField.onField == null) {
+        // Handle En-Passant captures
+        if (Math.abs(startCol - targetField.column) == 1 && targetField.onField == null) {
             int direction = (this.getColor() == Color.WHITE) ? 1 : -1;
-            Field capturedField = board.board[targetField.row + direction][targetField.column];
+            int capturedRow = targetField.row + direction;
+            int capturedCol = targetField.column;
+            Field capturedField = board.board[capturedRow][capturedCol];
+
             if (capturedField.onField instanceof Pawn) {
                 System.out.println("En-Passant capture executed: " + capturedField.onField);
-                capturedField.takePieceFromField();
+                capturedField.takePieceFromField(); // Entfernt die Figur aus dem Feld
+                board.board[capturedRow][capturedCol].onField = null; // Aktualisiert den Zustand des Boards
             }
+        }
+
+        // Call the superclass to handle the actual movement
+        super.moveTo(targetField);
+        
+        int targetRow = targetField.row;
+        if ((this.getColor() == Color.WHITE && targetRow == 0) || 
+            (this.getColor() == Color.BLACK && targetRow == 7)) {
+            System.out.println("Pawn reached the last rank: " + this);
+
+            // Notify the controller for promotion
+            board.lastMovedPiece = this;
+            board.notifyPawnPromotion(this, targetField);
         }
     }
 }

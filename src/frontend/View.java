@@ -80,10 +80,10 @@ public class View {
         	rightPanel.add(showCoordinatesCheckbox);
         }
         
-        JLabel whiteSquareLabel = new JLabel("Weiße Felder:");
-        whiteSquareColorButton = new JButton("Wählen");
+        JLabel whiteSquareLabel = new JLabel("WeiÃŸe Felder:");
+        whiteSquareColorButton = new JButton("WÃ¤hlen");
         JLabel darkSquareLabel = new JLabel("Dunkle Felder:");
-        darkSquareColorButton = new JButton("Wählen");
+        darkSquareColorButton = new JButton("WÃ¤hlen");
         
         if(two) {
             // Add color pickers
@@ -101,7 +101,7 @@ public class View {
         rotateBlackPiecesCheckbox = new JCheckBox("Drehen");
 
         if(three) {
-            // Checkbox für Figurenrotation
+            // Checkbox fï¿½r Figurenrotation
             rightPanel.add(Box.createVerticalStrut(20)); // Platzhalter
             rightPanel.add(rotateLabel);
             rightPanel.add(rotateBlackPiecesCheckbox);
@@ -267,11 +267,11 @@ public class View {
         String[] pieceNames = { "K", "Q", "R", "B", "N", "P" };
         String[] colors = { "WHITE", "BLACK" };
 
-        // Ermitteln der gewünschten Größe basierend auf den Schachfeldern
+        // Ermitteln der gewï¿½nschten Grï¿½ï¿½e basierend auf den Schachfeldern
         int fieldWidth = chessBoardButtons[0][0].getWidth();
         int fieldHeight = chessBoardButtons[0][0].getHeight();
         if (fieldWidth == 0 || fieldHeight == 0) {
-            // Standardgröße, falls die Felder noch nicht sichtbar sind
+            // Standardgrï¿½ï¿½e, falls die Felder noch nicht sichtbar sind
             fieldWidth = 60; // Beispielwert, kann angepasst werden
             fieldHeight = 60;
         }

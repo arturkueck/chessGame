@@ -32,6 +32,8 @@ public class Main {
 
         View view = new View(one, two, three);
         Controller controller = new Controller(board, view);
+        
+        board.setController(controller);
 
         view.setController(controller);
 
