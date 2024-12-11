@@ -49,7 +49,7 @@ public class Pawn extends Piece {
             if (diagonalLeft.onField != null && diagonalLeft.onField.getColor() != this.getColor()) {
                 reachableFields.add(diagonalLeft);
             }
-
+//#ifdef enPassat
             // En-Passant: Check
             Field leftField = board.board[currentRow][newCol];
             if (leftField.onField instanceof Pawn) {
@@ -63,6 +63,7 @@ public class Pawn extends Piece {
                     reachableFields.add(diagonalLeft);
                 }
             }
+//#endif
         }
 
         // Capture: Diagonal right
@@ -72,7 +73,7 @@ public class Pawn extends Piece {
             if (diagonalRight.onField != null && diagonalRight.onField.getColor() != this.getColor()) {
                 reachableFields.add(diagonalRight);
             }
-
+//#ifdef enPassat
             // En-Passant: Check
             Field rightField = board.board[currentRow][newCol];
             if (rightField.onField instanceof Pawn) {
@@ -86,6 +87,7 @@ public class Pawn extends Piece {
                     reachableFields.add(diagonalRight);
                 }
             }
+//#endif
         }
 
         return reachableFields.toArray(new Field[0]);
@@ -104,6 +106,7 @@ public class Pawn extends Piece {
             this.hasMovedTwoFields = false;
         }
 
+//#ifdef enPassat
         // Handle En-Passant captures
         if (Math.abs(startCol - targetField.column) == 1 && targetField.onField == null) {
             int direction = (this.getColor() == Color.WHITE) ? 1 : -1;
@@ -117,10 +120,12 @@ public class Pawn extends Piece {
                 board.board[capturedRow][capturedCol].onField = null; // Aktualisiert den Zustand des Boards
             }
         }
+//#endif
 
         // Call the superclass to handle the actual movement
         super.moveTo(targetField);
         
+//#ifdef pawnPromotion
         int targetRow = targetField.row;
         if ((this.getColor() == Color.WHITE && targetRow == 0) || 
             (this.getColor() == Color.BLACK && targetRow == 7)) {
@@ -130,5 +135,6 @@ public class Pawn extends Piece {
             board.lastMovedPiece = this;
             board.notifyPawnPromotion(this, targetField);
         }
+//#endif
     }
 }

@@ -8,25 +8,25 @@ public class Main {
     	boolean two = false;
     	boolean three = false;
     	
-    	for(String arg : args) {
-    		switch (arg) {
-			case "fieldnames": {
-				one = true;
-				break;
-			}
-			case "colorpicker": {
-				two = true;
-				break;
-			}
-			case "rotator": {
-				three = true;
-				break;
-			}
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + arg);
-			}
-    	}
-
+//    	for(String arg : args) {
+//    		switch (arg) {
+//			case "fieldnames": {
+//				one = true;
+//				break;
+//			}
+//			case "colorpicker": {
+//				two = true;
+//				break;
+//			}
+//			case "rotator": {
+//				three = true;
+//				break;
+//			}
+//			default:
+//				throw new IllegalArgumentException("Unexpected value: " + arg);
+//			}
+//    	}
+    	
         Board board = new Board();
         board.createChessGame();
 

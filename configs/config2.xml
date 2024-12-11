@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+	<feature automatic="selected" name="chessBoard"/>
+	<feature automatic="selected" name="gametype"/>
+	<feature automatic="selected" manual="selected" name="chess"/>
+	<feature name="enPassat"/>
+	<feature manual="selected" name="pawnPromotion"/>
+	<feature automatic="unselected" name="knightTakesItAll"/>
+	<feature automatic="unselected" name="checkers"/>
+	<feature automatic="unselected" name="noRulesAnalysis"/>
+	<feature manual="selected" name="pieces"/>
+	<feature automatic="selected" name="chessSet"/>
+	<feature automatic="unselected" name="checkersSet"/>
+	<feature name="onlineGame"/>
+	<feature name="clock"/>
+	<feature name="antiCheat"/>
+	<feature automatic="selected" manual="selected" name="board"/>
+	<feature manual="selected" name="fieldnames"/>
+	<feature name="piecesetOrfont"/>
+	<feature manual="selected" name="fieldcolors"/>
+	<feature manual="selected" name="rotateBlackPieces"/>
+	<feature manual="selected" name="notation"/>
+	<feature automatic="unselected" name="virtualPiecebox"/>
+	<feature name="Engine"/>
+</configuration>

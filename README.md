@@ -1,4 +1,6 @@
 # chessGame
+
+## Task 3
 Encountered Bugs: 
 Not all chess rules are implemented. No Bugs with possible configurations. Sometime laggy runetime due to resizing of the frame.
 
@@ -19,3 +21,22 @@ Advise 2: Dont make the by default white squares darken then the by default blac
 
 rotator:
 You can check a checkbox to rotate the black pieces around. Can be nice if you want to play with a friend on e.g. a tablet laying on a table.
+
+## Task 4
+features fieldnames, colorpicker and rotator are now selectable via the config of the feature-model-ide
+
+Encountered Bugs: 
+Promotion had few bugs, concidering the registration of the piece inside the board class and the registration of the position inside the piece so that the piece can determine its reachable fields. 
+Capturing a pawn EnPassat was working not properly at first. The piece was not being captures despite the enemy pawn performing the EnPassat movement.
+
+features:
+
+notation:
+the moves are being notated next to the board.
+
+enpassat:
+a pawn can take a pawn that performed a double move next to it.
+
+pawnpromotion:
+a pawn can transform into another piece excl. king and pawn once reaching the last column.
+

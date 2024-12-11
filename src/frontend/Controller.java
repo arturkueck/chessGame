@@ -43,6 +43,7 @@ public class Controller {
         updateChessBoard();
     }
     
+//#ifdef pawnPromotion
     public void handlePawnPromotion(Pawn pawn, Field field) {
         String[] options = {"Queen", "Rook", "Bishop", "Knight"};
         String choice = (String) JOptionPane.showInputDialog(
@@ -82,7 +83,7 @@ public class Controller {
 
         updateChessBoard(); // Refresh the board view
     }
-
+//#endif
 
 
     private void handleClick(int row, int col) {
@@ -115,7 +116,9 @@ public class Controller {
                 String moveNotation = generateMoveNotation(startRow, startCol, targetRow, targetCol, movedPiece,
                         targetPiece);
                 moveHistory.add(moveNotation);
+                //#ifdef notation
                 updateMoveNotationArea();
+                //#endif
                 updateChessBoard();
                 checkGameStatus(movedPiece);
 
@@ -143,7 +146,7 @@ public class Controller {
             Piece targetPiece) {
         StringBuilder notation = new StringBuilder();
 
-        // Prüfen auf kurze und lange Rochade
+        // Pr?fen auf kurze und lange Rochade
         if (movedPiece.getSymbol().equals("K") && Math.abs(startCol - targetCol) == 2) {
             if (targetCol > startCol) {
                 return "O-O"; // Kurze Rochade
@@ -192,10 +195,10 @@ public class Controller {
         Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
         if (board.isKingInCheckmate(opponentColor)) {
             JOptionPane.showMessageDialog(null,
-                    (opponentColor.equals(Color.WHITE) ? "Weiß" : "Schwarz") + " ist Schachmatt!");
+                    (opponentColor.equals(Color.WHITE) ? "Wei?" : "Schwarz") + " ist Schachmatt!");
         } // else if (board.isKingInCheck(opponentColor)) {
           // JOptionPane.showMessageDialog(null,
-          // (opponentColor.equals(Color.WHITE) ? "Weiß" : "Schwarz") + " ist im
+          // (opponentColor.equals(Color.WHITE) ? "Wei?" : "Schwarz") + " ist im
           // Schach!");
           // }
     }
@@ -228,7 +231,7 @@ public class Controller {
             }
         }
 
-        // Listener f�r Figurenrotation
+        // Listener f?r Figurenrotation
         view.getRotateBlackPiecesCheckbox().addActionListener(e -> {
             boolean rotateBlackPieces = view.getRotateBlackPiecesCheckbox().isSelected();
             view.loadPieceIcons(!rotateBlackPieces); // Aktualisiere Icons
@@ -240,7 +243,7 @@ public class Controller {
             toggleFieldCoordinates(showCoordinates);
         });
 
-        // Color Picker Listeners bleiben unver�ndert
+        // Color Picker Listeners bleiben unver?ndert
         view.getWhiteSquareColorButton().addActionListener(e -> {
             Color newWhiteColor = JColorChooser.showDialog(null, "Choose White Square Color", whiteSquareColor);
             if (newWhiteColor != null) {

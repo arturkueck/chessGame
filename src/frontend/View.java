@@ -54,13 +54,16 @@ public class View {
 
         // Left panel for move notations
         leftPanel = new JPanel(new BorderLayout());
+        
+//#ifdef notation
         moveNotationArea = new JTextArea();
         moveNotationArea.setEditable(false);
         moveNotationArea.setFont(new Font("Arial", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(moveNotationArea);
         leftPanel.add(scrollPane, BorderLayout.CENTER);
+//#endif
         leftPanel.setPreferredSize(new Dimension(200, 600));
-
+        
         // Center panel for the chessboard
         chessBoardPanel = new JPanel(new GridLayout(8, 8));
         chessBoardPanels = new JPanel[8][8];
@@ -76,37 +79,59 @@ public class View {
         // Add the "Show Coordinates" checkbox
         showCoordinatesCheckbox = new JCheckBox("Feldbezeichnungen anzeigen");
         
-        if(one) {
-        	rightPanel.add(showCoordinatesCheckbox);
-        }
+//        if(one) {
+//        	rightPanel.add(showCoordinatesCheckbox);
+//        }
         
-        JLabel whiteSquareLabel = new JLabel("Weiße Felder:");
-        whiteSquareColorButton = new JButton("Wählen");
+//#ifdef fieldnames
+//@        rightPanel.add(showCoordinatesCheckbox);
+//#endif
+        
+        JLabel whiteSquareLabel = new JLabel("Weisse Felder:");
+        whiteSquareColorButton = new JButton("Waehlen");
         JLabel darkSquareLabel = new JLabel("Dunkle Felder:");
-        darkSquareColorButton = new JButton("Wählen");
+        darkSquareColorButton = new JButton("Waehlen");
         
-        if(two) {
-            // Add color pickers
-            rightPanel.add(Box.createVerticalStrut(10)); // Add some spacing
-            rightPanel.add(whiteSquareLabel);
-            rightPanel.add(whiteSquareColorButton);
+//        if(two) {
+//            // Add color pickers
+//            rightPanel.add(Box.createVerticalStrut(10)); // Add some spacing
+//            rightPanel.add(whiteSquareLabel);
+//            rightPanel.add(whiteSquareColorButton);
+//
+//            rightPanel.add(Box.createVerticalStrut(10)); // Add some spacing
+//            rightPanel.add(darkSquareLabel);
+//            rightPanel.add(darkSquareColorButton);
+//
+//        }
 
-            rightPanel.add(Box.createVerticalStrut(10)); // Add some spacing
-            rightPanel.add(darkSquareLabel);
-            rightPanel.add(darkSquareColorButton);
+//#ifdef fieldcolors
+      rightPanel.add(Box.createVerticalStrut(10)); // Add some spacing
+      rightPanel.add(whiteSquareLabel);
+      rightPanel.add(whiteSquareColorButton);
 
-        }
-        
+      rightPanel.add(Box.createVerticalStrut(10)); // Add some spacing
+      rightPanel.add(darkSquareLabel);
+      rightPanel.add(darkSquareColorButton);
+//#endif
+      
+      
         JLabel rotateLabel = new JLabel("Schwarze Figuren drehen:");
         rotateBlackPiecesCheckbox = new JCheckBox("Drehen");
 
-        if(three) {
-            // Checkbox f�r Figurenrotation
-            rightPanel.add(Box.createVerticalStrut(20)); // Platzhalter
-            rightPanel.add(rotateLabel);
-            rightPanel.add(rotateBlackPiecesCheckbox);
-        }
+//        if(three) {
+//            // Checkbox f?r Figurenrotation
+//            rightPanel.add(Box.createVerticalStrut(20)); // Platzhalter
+//            rightPanel.add(rotateLabel);
+//            rightPanel.add(rotateBlackPiecesCheckbox);
+//        }
 
+//#ifdef rotateBlackPieces
+        // Checkbox f?r Figurenrotation
+        rightPanel.add(Box.createVerticalStrut(20)); // Platzhalter
+        rightPanel.add(rotateLabel);
+        rightPanel.add(rotateBlackPiecesCheckbox);
+//#endif
+        
         // Add panels to main layout
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(chessBoardPanel, BorderLayout.CENTER);
@@ -267,11 +292,11 @@ public class View {
         String[] pieceNames = { "K", "Q", "R", "B", "N", "P" };
         String[] colors = { "WHITE", "BLACK" };
 
-        // Ermitteln der gew�nschten Gr��e basierend auf den Schachfeldern
+        // Ermitteln der gew?nschten Gr??e basierend auf den Schachfeldern
         int fieldWidth = chessBoardButtons[0][0].getWidth();
         int fieldHeight = chessBoardButtons[0][0].getHeight();
         if (fieldWidth == 0 || fieldHeight == 0) {
-            // Standardgr��e, falls die Felder noch nicht sichtbar sind
+            // Standardgr??e, falls die Felder noch nicht sichtbar sind
             fieldWidth = 60; // Beispielwert, kann angepasst werden
             fieldHeight = 60;
         }

@@ -33,7 +33,7 @@ public class Board {
         Color white = Color.WHITE;
         Color black = Color.BLACK;
 
-        // Weiße Figuren platzieren (unten)
+        // Wei?e Figuren platzieren (unten)
         new Rook(white, this).setField(7, 0);
         new Knight(white, this).setField(7, 1);
         new Bishop(white, this).setField(7, 2);
@@ -104,7 +104,7 @@ public class Board {
             return false;
         }
 
-        // Verwende moveTo statt setField, um die Bewegung korrekt auszuführen
+        // Verwende moveTo statt setField, um die Bewegung korrekt auszuf?hren
         piece.moveTo(targetField);
 
         // Update last moved piece
@@ -205,12 +205,13 @@ public class Board {
         return true; // No moves to escape or block -> Checkmate
     }
     
+//#ifdef pawnPromotion
     public void notifyPawnPromotion(Pawn pawn, Field field) {
         if (this.controller != null) {
             this.controller.handlePawnPromotion(pawn, field);
         }
     }
-
+//#endif
 
     @Override
     public String toString() {
@@ -230,7 +231,7 @@ public class Board {
 
     public Field getField(int row, int col) {
         if (row < 0 || row >= 8 || col < 0 || col >= 8) {
-            throw new IllegalArgumentException("Ungültige Koordinaten: Die Werte müssen zwischen 0 und 7 liegen.");
+            throw new IllegalArgumentException("Ung?ltige Koordinaten: Die Werte m?ssen zwischen 0 und 7 liegen.");
         }
         return board[row][col];
     }

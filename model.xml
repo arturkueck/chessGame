@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="autolayoutconstraints" value="false"/>
+		<graphics key="legendautolayout" value="true"/>
+		<graphics key="showconstraints" value="true"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and mandatory="true" name="chessBoard">
+			<graphics key="collapsed" value="false"/>
+			<alt mandatory="true" name="gametype">
+				<and name="chess">
+					<feature name="enPassat"/>
+					<feature name="pawnPromotion"/>
+				</and>
+				<feature abstract="true" name="knightTakesItAll"/>
+				<feature abstract="true" name="checkers"/>
+				<feature abstract="true" name="noRulesAnalysis"/>
+			</alt>
+			<alt name="pieces">
+				<feature name="chessSet"/>
+				<feature abstract="true" name="checkersSet"/>
+			</alt>
+			<or abstract="true" name="onlineGame">
+				<feature abstract="true" name="clock"/>
+				<feature abstract="true" name="antiCheat"/>
+			</or>
+			<or name="board">
+				<feature name="fieldnames"/>
+				<feature abstract="true" name="piecesetOrfont"/>
+				<feature name="fieldcolors"/>
+				<feature name="rotateBlackPieces"/>
+				<feature name="notation"/>
+			</or>
+			<feature abstract="true" name="virtualPiecebox"/>
+			<feature abstract="true" name="Engine"/>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<imp>
+				<var>chessSet</var>
+				<var>chess</var>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>checkersSet</var>
+				<var>checkers</var>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>virtualPiecebox</var>
+				<var>noRulesAnalysis</var>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>onlineGame</var>
+				<not>
+					<var>Engine</var>
+				</not>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>
