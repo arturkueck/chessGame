@@ -2,7 +2,7 @@ package backend;
 
 import java.awt.Color;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
     String name;
     Color color;
     protected Board board;
@@ -54,6 +54,17 @@ public abstract class Piece {
     
     public String getSymbol() {
         return name.substring(0, 1).toUpperCase(); // Erster Buchstabe des Namens
+    }
+
+    @Override
+    public Piece clone() {
+        try {
+            Piece cloned = (Piece) super.clone();
+            // Reset transient properties if necessary
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
+        }
     }
 
     

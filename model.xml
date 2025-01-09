@@ -17,6 +17,8 @@
 				<and name="chess">
 					<feature name="enPassat"/>
 					<feature name="pawnPromotion"/>
+					<feature name="check"/>
+					<feature name="checkmate"/>
 				</and>
 				<feature abstract="true" name="knightTakesItAll"/>
 				<feature abstract="true" name="checkers"/>

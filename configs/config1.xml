@@ -5,6 +5,8 @@
 	<feature automatic="selected" manual="selected" name="chess"/>
 	<feature manual="selected" name="enPassat"/>
 	<feature manual="selected" name="pawnPromotion"/>
+	<feature manual="selected" name="check"/>
+	<feature manual="selected" name="checkmate"/>
 	<feature automatic="unselected" name="knightTakesItAll"/>
 	<feature automatic="unselected" name="checkers"/>
 	<feature automatic="unselected" name="noRulesAnalysis"/>
@@ -16,7 +18,7 @@
 	<feature name="antiCheat"/>
 	<feature automatic="selected" manual="selected" name="board"/>
 	<feature manual="selected" name="fieldnames"/>
-	<feature name="piecesetOrfont"/>
+	<feature manual="selected" name="piecesetOrfont"/>
 	<feature manual="selected" name="fieldcolors"/>
 	<feature manual="selected" name="rotateBlackPieces"/>
 	<feature manual="selected" name="notation"/>

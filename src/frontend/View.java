@@ -84,7 +84,7 @@ public class View {
 //        }
         
 //#ifdef fieldnames
-//@        rightPanel.add(showCoordinatesCheckbox);
+        rightPanel.add(showCoordinatesCheckbox);
 //#endif
         
         JLabel whiteSquareLabel = new JLabel("Weisse Felder:");
@@ -334,7 +334,7 @@ public class View {
                         // Bild als Icon speichern
                         ImageIcon icon = new ImageIcon(scaledImage);
                         pieceIcons.put(piece + "_" + color, icon);
-                        System.out.println("Successfully loaded icon: " + piece + "_" + color);
+                        //System.out.println("Successfully loaded icon: " + piece + "_" + color);
                     }
                 } catch (Exception e) {
                     System.out.println("Failed to load icon: " + piece + "_" + color + " (" + e.getMessage() + ")");

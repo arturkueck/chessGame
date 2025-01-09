@@ -32,6 +32,8 @@ public class Controller {
 
     private Color whiteSquareColor = Color.WHITE; // Default white color
     private Color darkSquareColor = new Color(139, 69, 19); // Default dark color
+    
+    private boolean gamestate = true;
 
     public Controller(Board board, View view) {
         this.board = board;
@@ -85,22 +87,44 @@ public class Controller {
     }
 //#endif
 
+    private boolean doesMoveResolveCheck(Piece movedPiece, int startRow, int startCol, int targetRow, int targetCol) {
+        // Simuliere den Zug
+        Piece originalTargetPiece = board.getPiece(targetRow, targetCol);
+        board.movePiece(startRow, startCol, targetRow, targetCol);
+
+        // Überprüfe, ob der König des aktuellen Spielers weiterhin im Schach steht
+        boolean stillInCheck = board.isKingInCheck(movedPiece.getColor());
+
+        // Rückgängig machen des simulierten Zuges
+        board.undoMove(startRow, startCol, targetRow, targetCol, originalTargetPiece);
+
+        // Der Zug ist nur gültig, wenn der Spieler nicht mehr im Schach ist
+        return !stillInCheck;
+    }
 
     private void handleClick(int row, int col) {
+        if (!gamestate) {
+            return; // Block moves if the game is over
+        }
+
         String fieldNotation = columnToNotation(col) + rowToNotation(row);
 
         if (selectedField == null) {
+            // Select a piece
             if (board.getField(row, col).onField != null) {
                 Piece selectedPiece = board.getField(row, col).onField;
+
                 // Check if it's the current player's turn
                 if (!selectedPiece.getColor().equals(currentPlayer)) {
                     JOptionPane.showMessageDialog(null, "It's " + getColorName(currentPlayer) + "'s turn!");
                     return;
                 }
+
                 selectedField = fieldNotation;
-                view.getChessBoardButtons()[row][col].setBackground(Color.YELLOW);
+                view.getChessBoardButtons()[row][col].setBackground(Color.YELLOW); // Highlight the selected field
             }
         } else {
+            // Target position selected
             String targetField = fieldNotation;
             int startCol = notationToColumn(selectedField.charAt(0));
             int startRow = notationToRow(selectedField.charAt(1));
@@ -110,28 +134,47 @@ public class Controller {
             Piece movedPiece = board.getPiece(startRow, startCol);
             Piece targetPiece = board.getPiece(targetRow, targetCol);
 
-            if (board.movePiece(startRow, startCol, targetRow, targetCol)) {
-                System.out
-                        .println("Move executed: " + startRow + "," + startCol + " to " + targetRow + "," + targetCol);
-                String moveNotation = generateMoveNotation(startRow, startCol, targetRow, targetCol, movedPiece,
-                        targetPiece);
-                moveHistory.add(moveNotation);
-                //#ifdef notation
-                updateMoveNotationArea();
-                //#endif
-                updateChessBoard();
-                checkGameStatus(movedPiece);
+            board.saveState();
 
-                // Switch to the next player only if the move was successful
+            // Attempt to make the move
+            if (board.movePiece(startRow, startCol, targetRow, targetCol)) {
+                // Check if the move resolves a check
+                if (board.isKingInCheck(currentPlayer)) {
+                    JOptionPane.showMessageDialog(null, "Invalid move. Your king is still in check!");
+
+                    // Undo the move
+                    board.undoMove();
+                    updateChessBoard(); // Reset the board view
+
+                    // Reset selection and colors
+                    selectedField = null;
+                    view.resetButtonColors(whiteSquareColor, darkSquareColor);
+                    return;
+                }
+
+                // Log and update the board for a valid move
+                System.out.println("Move executed: " + startRow + "," + startCol + " to " + targetRow + "," + targetCol);
+                String moveNotation = generateMoveNotation(startRow, startCol, targetRow, targetCol, movedPiece, targetPiece);
+                moveHistory.add(moveNotation);
+
+                // Update notation if enabled
+                updateMoveNotationArea();
+
+                updateChessBoard(); // Refresh the board view
+                checkGameStatus(movedPiece); // Check for game end conditions
+
+                // Switch player if the move was valid
                 switchPlayer();
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid move. Try again.");
             }
 
+            // Reset selection and colors
             selectedField = null;
             view.resetButtonColors(whiteSquareColor, darkSquareColor);
         }
     }
+
 
     private void switchPlayer() {
         currentPlayer = currentPlayer.equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -180,27 +223,33 @@ public class Controller {
         notation.append(columnToNotation(targetCol)).append(rowToNotation(targetRow));
 
         // 4. Add "+" for check or "#" for checkmate
+//#ifdef checkmate && check
         Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
         if (board.isKingInCheckmate(opponentColor)) {
             notation.append("#");
         } else if (board.isKingInCheck(opponentColor)) {
             notation.append("+");
         }
-
+//#endif
+//#ifdef check && !checkmate
+//        Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
+//        if (board.isKingInCheck(opponentColor)) {
+//            notation.append("+");
+//        }
+//#endif
         return notation.toString();
     }
 
 
     private void checkGameStatus(Piece movedPiece) {
         Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
+//#ifdef checkmate && check
         if (board.isKingInCheckmate(opponentColor)) {
+            gamestate = false; // Spielfeld sperren
             JOptionPane.showMessageDialog(null,
-                    (opponentColor.equals(Color.WHITE) ? "Wei?" : "Schwarz") + " ist Schachmatt!");
-        } // else if (board.isKingInCheck(opponentColor)) {
-          // JOptionPane.showMessageDialog(null,
-          // (opponentColor.equals(Color.WHITE) ? "Wei?" : "Schwarz") + " ist im
-          // Schach!");
-          // }
+                    (opponentColor.equals(Color.WHITE) ? "Weiß" : "Schwarz") + " ist Schachmatt!");
+        }
+//#endif
     }
 
     private void updateMoveNotationArea() {
@@ -270,10 +319,10 @@ public class Controller {
                     ImageIcon icon = view.getPieceIcon(piece.getSymbol(), piece.getColor());
                     chessBoardButtons[row][col].setIcon(icon); // Set icon
                     chessBoardButtons[row][col].setText(""); // Clear text
-                    System.out.println("Set icon for " + piece + " at " + row + "," + col);
+                    //System.out.println("Set icon for " + piece + " at " + row + "," + col);
                 } else {
                     chessBoardButtons[row][col].setIcon(null); // Clear icon
-                    System.out.println("Cleared icon at " + row + "," + col);
+                    //System.out.println("Cleared icon at " + row + "," + col);
                 }
             }
         }

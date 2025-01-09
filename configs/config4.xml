@@ -5,6 +5,8 @@
 	<feature automatic="selected" manual="selected" name="chess"/>
 	<feature manual="selected" name="enPassat"/>
 	<feature manual="selected" name="pawnPromotion"/>
+	<feature name="check"/>
+	<feature name="checkmate"/>
 	<feature automatic="unselected" name="knightTakesItAll"/>
 	<feature automatic="unselected" name="checkers"/>
 	<feature automatic="unselected" name="noRulesAnalysis"/>

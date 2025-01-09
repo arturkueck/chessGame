@@ -13,6 +13,8 @@ import frontend.Controller;
 
 public class Board {
     public Field[][] board = new Field[8][8];
+    private Field[][] savedState;
+
     public Piece lastMovedPiece = null; // Tracks the last moved piece
     public Controller controller;
 
@@ -70,9 +72,60 @@ public class Board {
         return board[col][row].onField;
     }
 
+    public void saveState() {
+        savedState = new Field[8][8];
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Field original = board[row][col];
+                Field copy = new Field(original.row, original.column);
+
+                if (original.onField != null) {
+                    Piece originalPiece = original.onField;
+                    Piece clonedPiece = originalPiece.clone(); // Implement clone in Piece class
+                    copy.placePiece(clonedPiece);
+                }
+
+                savedState[row][col] = copy;
+            }
+        }
+    }
+
+    public void restoreState() {
+        if (savedState == null) {
+            throw new IllegalStateException("No saved state to restore.");
+        }
+
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Field savedField = savedState[row][col];
+                Field currentField = board[row][col];
+
+                currentField.takePieceFromField(); // Clear current field
+                if (savedField.onField != null) {
+                    Piece savedPiece = savedField.onField;
+                    Piece clonedPiece = savedPiece.clone(); // Clone to maintain object separation
+                    currentField.placePiece(clonedPiece);
+                }
+            }
+        }
+    }
+
+    
+    public void undoMove() {
+        try {
+            // Restore the board to the previously saved state
+            restoreState();
+            System.out.println("Move undone: Board state restored to the last saved state.");
+        } catch (IllegalStateException e) {
+            System.err.println("Cannot undo move: " + e.getMessage());
+        }
+    }
+
+
+
     public boolean movePiece(int col, int row, int col2, int row2) {
         if (col < 0 || col >= 8 || row < 0 || row >= 8 || col2 < 0 || col2 >= 8 || row2 < 0 || row2 >= 8) {
-            System.out.println("Invalid move: out of board bounds.");
+            //System.out.println("Invalid move: out of board bounds.");
             return false;
         }
 
@@ -80,15 +133,15 @@ public class Board {
         Field targetField = board[col2][row2];
 
         if (startField.onField == null) {
-            System.out.println("No piece on the starting field.");
+            //System.out.println("No piece on the starting field.");
             return false;
         }
 
         Piece piece = startField.onField;
         Field[] reachableFields = piece.getReachableFields();
-        System.out.println("Reachable fields for " + piece + ":");
+        //System.out.println("Reachable fields for " + piece + ":");
         for (Field f : reachableFields) {
-            System.out.println("Field: (" + f.row + ", " + f.column + ")");
+            //System.out.println("Field: (" + f.row + ", " + f.column + ")");
         }
 
         boolean isReachable = false;
@@ -100,7 +153,7 @@ public class Board {
         }
 
         if (!isReachable) {
-            System.out.println("Target field is not reachable.");
+            //System.out.println("Target field is not reachable.");
             return false;
         }
 
@@ -109,7 +162,7 @@ public class Board {
 
         // Update last moved piece
         lastMovedPiece = piece;
-        System.out.println("Last moved piece updated to: " + piece);
+        //System.out.println("Last moved piece updated to: " + piece);
         return true;
     }
 
@@ -124,7 +177,7 @@ public class Board {
         }
         return null; // No king found
     }
-
+//#ifdef check
     public boolean isKingInCheck(Color kingColor) {
         Field kingField = findKingField(kingColor);
         if (kingField == null)
@@ -138,6 +191,7 @@ public class Board {
                     Field[] reachableFields = piece.getReachableFields();
                     for (Field reachableField : reachableFields) {
                         if (reachableField.equals(kingField)) {
+                        	System.out.println("check");
                             return true; // The king is in check
                         }
                     }
@@ -146,7 +200,9 @@ public class Board {
         }
         return false;
     }
-
+//#endif
+    
+//#ifdef check && checkmate
     public boolean isKingInCheckmate(Color kingColor) {
         if (!isKingInCheck(kingColor))
             return false; // Not in check -> Not in checkmate
@@ -201,9 +257,10 @@ public class Board {
                 }
             }
         }
-
+        System.out.println("checkmate");
         return true; // No moves to escape or block -> Checkmate
     }
+//#endif
     
 //#ifdef pawnPromotion
     public void notifyPawnPromotion(Pawn pawn, Field field) {
