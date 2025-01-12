@@ -12,6 +12,12 @@
 	<feature automatic="unselected" name="noRulesAnalysis"/>
 	<feature manual="selected" name="pieces"/>
 	<feature automatic="selected" name="chessSet"/>
+	<feature name="King"/>
+	<feature name="Queen"/>
+	<feature name="Bishop"/>
+	<feature name="Knight"/>
+	<feature name="Rook"/>
+	<feature name="Pawn"/>
 	<feature automatic="unselected" name="checkersSet"/>
 	<feature name="onlineGame"/>
 	<feature name="clock"/>

@@ -25,7 +25,14 @@
 				<feature abstract="true" name="noRulesAnalysis"/>
 			</alt>
 			<alt name="pieces">
-				<feature name="chessSet"/>
+				<and name="chessSet">
+					<feature name="King"/>
+					<feature name="Queen"/>
+					<feature name="Bishop"/>
+					<feature name="Knight"/>
+					<feature name="Rook"/>
+					<feature name="Pawn"/>
+				</and>
 				<feature abstract="true" name="checkersSet"/>
 			</alt>
 			<or abstract="true" name="onlineGame">
@@ -68,6 +75,12 @@
 				<not>
 					<var>Engine</var>
 				</not>
+			</imp>
+		</rule>
+		<rule>
+			<imp>
+				<var>checkmate</var>
+				<var>check</var>
 			</imp>
 		</rule>
 	</constraints>

@@ -9,11 +9,12 @@ import backend.Piece;
 
 public class Rook extends Piece {
 	public boolean hasMooved = false;
+	public int[][] possibleFields = {{0, 7}, {7, 7}, {0, 0}, {7, 0}};
 	
     public Rook(Color color, Board board) {
         super("R", color, board);
     }
-
+    
     @Override
     public Field[] getReachableFields() {
         ArrayList<Field> reachableFields = new ArrayList<>();
@@ -64,4 +65,15 @@ public class Rook extends Piece {
         super.moveTo(targetField);
         this.hasMoved = true; // Sobald sich der Turm bewegt, wird hasMoved auf true gesetzt
     }
+
+
+
+	@Override
+	public void create() {
+		new Rook(Color.WHITE, board).setField(7, 0);
+        new Rook(Color.WHITE, board).setField(7, 7);
+
+        new Rook(Color.BLACK, board).setField(0, 0);
+        new Rook(Color.BLACK, board).setField(0, 7);
+	}
 }

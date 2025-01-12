@@ -96,7 +96,7 @@ public class Controller {
         boolean stillInCheck = board.isKingInCheck(movedPiece.getColor());
 
         // Rückgängig machen des simulierten Zuges
-        board.undoMove(startRow, startCol, targetRow, targetCol, originalTargetPiece);
+        board.undoMove();
 
         // Der Zug ist nur gültig, wenn der Spieler nicht mehr im Schach ist
         return !stillInCheck;
@@ -223,7 +223,7 @@ public class Controller {
         notation.append(columnToNotation(targetCol)).append(rowToNotation(targetRow));
 
         // 4. Add "+" for check or "#" for checkmate
-//#ifdef checkmate && check
+//#ifdef checkmate
         Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
         if (board.isKingInCheckmate(opponentColor)) {
             notation.append("#");
@@ -231,7 +231,7 @@ public class Controller {
             notation.append("+");
         }
 //#endif
-//#ifdef check && !checkmate
+//#ifdef check
 //        Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
 //        if (board.isKingInCheck(opponentColor)) {
 //            notation.append("+");
@@ -243,7 +243,7 @@ public class Controller {
 
     private void checkGameStatus(Piece movedPiece) {
         Color opponentColor = movedPiece.getColor().equals(Color.WHITE) ? Color.BLACK : Color.WHITE;
-//#ifdef checkmate && check
+//#ifdef checkmate
         if (board.isKingInCheckmate(opponentColor)) {
             gamestate = false; // Spielfeld sperren
             JOptionPane.showMessageDialog(null,

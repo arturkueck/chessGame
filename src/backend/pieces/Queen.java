@@ -8,7 +8,8 @@ import backend.Field;
 import backend.Piece;
 
 public class Queen extends Piece {
-
+	public int[][] possibleFields = {{0, 4}, {7, 4}};
+	
     public Queen(Color color, Board board) {
         super("Q", color, board);
     }
@@ -61,4 +62,11 @@ public class Queen extends Piece {
 
         return reachableFields.toArray(new Field[0]);
     }
+
+	@Override
+	public void create() {
+        new Queen(Color.WHITE, board).setField(7, 3);
+
+        new Queen(Color.BLACK, board).setField(0, 3);
+	}
 }

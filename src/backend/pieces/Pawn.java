@@ -10,6 +10,15 @@ import backend.Piece;
 
 public class Pawn extends Piece {
     public boolean hasMovedTwoFields = false;
+	public int[][] possibleFields = 
+			{{1, 0}, {6, 0}, 
+			{1, 1}, {6, 1},
+			{1, 2}, {6, 2},
+			{1, 3}, {6, 3},
+			{1, 4}, {6, 4},
+			{1, 5}, {6, 5},
+			{1, 6}, {6, 6},
+			{1, 7}, {6, 7}};
 
     public Pawn(Color color, Board board) {
         super("P", color, board);
@@ -137,4 +146,12 @@ public class Pawn extends Piece {
         }
 //#endif
     }
+
+	@Override
+	public void create() {
+        for (int i = 0; i < 8; i++) {
+            new Pawn(Color.WHITE, board).setField(6, i);
+            new Pawn(Color.BLACK, board).setField(1, i);
+        }
+	}
 }

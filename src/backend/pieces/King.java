@@ -9,6 +9,8 @@ import backend.Field;
 import backend.Piece;
 
 public class King extends Piece {
+	public int[][] possibleFields = {{0, 4}, {7, 4}};
+	
     public boolean hasMooved = false;
 
     public King(Color color, Board board) {
@@ -139,4 +141,10 @@ public class King extends Piece {
         super.moveTo(targetField);
         this.hasMoved = true; // Sobald sich der König bewegt, wird hasMoved auf true gesetzt
     }
+
+	@Override
+	public void create() {
+        new King(Color.WHITE, board).setField(7, 4);
+        new King(Color.BLACK, board).setField(0, 4);
+	}
 }

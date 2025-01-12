@@ -8,6 +8,7 @@ public abstract class Piece implements Cloneable {
     protected Board board;
     Field field;
     public boolean hasMoved;
+	public int[][] possibleFields;
     
     public Piece(String name, Color color, Board board) {
         this.name = name;
@@ -15,6 +16,8 @@ public abstract class Piece implements Cloneable {
         this.board = board;
         this.hasMoved = false; // Standardmäßig hat sich die Figur noch nicht bewegt
     }
+
+    public abstract void create();
     
     public Color getColor() {
         return this.color;

@@ -8,7 +8,8 @@ import backend.Field;
 import backend.Piece;
 
 public class Bishop extends Piece {
-
+	public int[][] possibleFields = {{7, 2}, {7, 5}, {0, 2}, {0, 5}};
+	
     public Bishop(Color color, Board board) {
         super("B", color, board);
     }
@@ -57,4 +58,13 @@ public class Bishop extends Piece {
 
         return reachableFields.toArray(new Field[0]);
     }
+
+	@Override
+	public void create() {
+		new Bishop(Color.WHITE, board).setField(7, 2);
+		new Bishop(Color.WHITE, board).setField(7, 5);
+		
+		new Bishop(Color.BLACK, board).setField(0, 2);
+		new Bishop(Color.BLACK, board).setField(0, 5);
+	}
 }

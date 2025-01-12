@@ -2,6 +2,7 @@
 package backend;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import backend.pieces.Bishop;
 import backend.pieces.King;
@@ -18,50 +19,32 @@ public class Board {
     public Piece lastMovedPiece = null; // Tracks the last moved piece
     public Controller controller;
 
+    public ArrayList<Piece> pieceList = new ArrayList<Piece>();
+    
     public Board() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board[i][j] = new Field(i, j);
             }
         }
+        
+        pieceList.add(new Rook(null, this));
+        pieceList.add(new Knight(null, this));
+        pieceList.add(new Bishop(null, this));
+        pieceList.add(new Queen(null, this));
+        pieceList.add(new King(null, this));
+        pieceList.add(new Pawn(null, this));
     }
     
     public void setController(Controller controller) {
     	this.controller = controller;
     }
 
+    
     public void createChessGame() {
-        // Farben definieren
-        Color white = Color.WHITE;
-        Color black = Color.BLACK;
-
-        // Wei?e Figuren platzieren (unten)
-        new Rook(white, this).setField(7, 0);
-        new Knight(white, this).setField(7, 1);
-        new Bishop(white, this).setField(7, 2);
-        new Queen(white, this).setField(7, 3);
-        new King(white, this).setField(7, 4);
-        new Bishop(white, this).setField(7, 5);
-        new Knight(white, this).setField(7, 6);
-        new Rook(white, this).setField(7, 7);
-
-        for (int i = 0; i < 8; i++) {
-            new Pawn(white, this).setField(6, i);
-        }
-
-        // Schwarze Figuren platzieren (oben)
-        new Rook(black, this).setField(0, 0);
-        new Knight(black, this).setField(0, 1);
-        new Bishop(black, this).setField(0, 2);
-        new Queen(black, this).setField(0, 3);
-        new King(black, this).setField(0, 4);
-        new Bishop(black, this).setField(0, 5);
-        new Knight(black, this).setField(0, 6);
-        new Rook(black, this).setField(0, 7);
-
-        for (int i = 0; i < 8; i++) {
-            new Pawn(black, this).setField(1, i);
-        }
+    	for(Piece piece: pieceList) {
+    		piece.create();
+    	}
     }
 
     public boolean checkIfEmpty(int col, int row) {
@@ -202,7 +185,7 @@ public class Board {
     }
 //#endif
     
-//#ifdef check && checkmate
+//#ifdef checkmate
     public boolean isKingInCheckmate(Color kingColor) {
         if (!isKingInCheck(kingColor))
             return false; // Not in check -> Not in checkmate

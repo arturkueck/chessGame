@@ -8,6 +8,7 @@ import backend.Field;
 import backend.Piece;
 
 public class Knight extends Piece {
+	public int[][] possibleFields = {{0, 1}, {7, 1}, {0, 6}, {7, 6}};
 
     public Knight(Color color, Board board) {
         super("N", color, board);
@@ -52,4 +53,14 @@ public class Knight extends Piece {
 
         return reachableFields.toArray(new Field[0]);
     }
+
+	@Override
+	public void create() {
+		new Knight(Color.WHITE, board).setField(7, 1);
+        new Knight(Color.WHITE, board).setField(7, 6);
+        
+
+        new Knight(Color.BLACK, board).setField(0, 1);
+        new Knight(Color.BLACK, board).setField(0, 6);
+	}
 }
